@@ -30,6 +30,11 @@
   <depdir>Core/dep</depdir>
   <docdir>Core/doc</docdir>
   
+  <test>
+  <srcdir>CoreTest/src</srcdir>
+  <bindir>CoreTest/bin</bindir>
+  </test>
+  
   <jar>
     <filename>hypergraph-generator.jar</filename>
   </jar>
