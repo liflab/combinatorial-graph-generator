@@ -9,6 +9,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
 
+/**
+ * Generates a hypergraph where vertices represent value assignments
+ * for a set of variables
+ */
 public class HypergraphGenerator
 {
 	/**
@@ -30,7 +34,12 @@ public class HypergraphGenerator
 	 * The maximum size of the domain of a variable
 	 */
 	protected int m_maxDomSize = 0;
-	
+
+	/**
+	 * Create a new hypergraph generator
+	 * @param var_names The names of the variables that will be represented
+	 * in each vertex
+	 */
 	public HypergraphGenerator(String ... var_names)
 	{
 		super();
@@ -42,7 +51,12 @@ public class HypergraphGenerator
 			m_varNames.add(v);
 		}
 	}
-	
+
+	/**
+	 * Create a new hypergraph generator
+	 * @param var_names The names of the variables that will be represented
+	 * in each vertex
+	 */
 	public HypergraphGenerator(List<String> var_names)
 	{
 		super();

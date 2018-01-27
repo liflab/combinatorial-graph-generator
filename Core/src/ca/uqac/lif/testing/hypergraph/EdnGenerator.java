@@ -2,6 +2,10 @@ package ca.uqac.lif.testing.hypergraph;
 
 import java.util.List;
 
+/**
+ * Generates a hypergraph in the EDN file format (used by the
+ * <tt>hitting-set</tt> tool)  
+ */
 public class EdnGenerator extends HypergraphGenerator 
 {
 	protected boolean m_firstEdge = true;

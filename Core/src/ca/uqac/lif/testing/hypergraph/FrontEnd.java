@@ -11,6 +11,9 @@ import java.util.Scanner;
 import ca.uqac.lif.testing.hypergraph.CliParser.Argument;
 import ca.uqac.lif.testing.hypergraph.CliParser.ArgumentMap;
 
+/**
+ * Command-line front-end to the hypergraph generator
+ */
 public class FrontEnd 
 {
 	public static void main(String[] args)
@@ -44,6 +47,13 @@ public class FrontEnd
 		}
 	}
 
+	/**
+	 * Parses a file to instantiate a hypergraph generator
+	 * @param f The file to read from
+	 * @param edn Whether to instantiate an EDN generator
+	 * @return The graph generator
+	 * @throws FileNotFoundException If the file was not found
+	 */
 	protected static HypergraphGenerator createGenerator(File f, boolean edn) throws FileNotFoundException
 	{
 		Scanner scanner = new Scanner(f);
