@@ -11,18 +11,20 @@ import java.util.Scanner;
 import ca.uqac.lif.testing.hypergraph.CliParser.Argument;
 import ca.uqac.lif.testing.hypergraph.CliParser.ArgumentMap;
 
-public class PrintStreamGenerator extends HypergraphGenerator 
+public class FrontEnd 
 {
-	public PrintStreamGenerator(List<String> var_names)
-	{
-		super(var_names);
-	}
-
 	public static void main(String[] args)
 	{
 		CliParser parser = new CliParser();
 		parser.addArgument(new Argument().withShortName("t").withArgument("x").withDescription("Generates hyperedges for t=x"));
+		parser.addArgument(new Argument().withLongName("edn").withDescription("Generates graph in EDN format"));
+		parser.addArgument(new Argument().withLongName("help").withDescription("Show command line usage"));
 		ArgumentMap arguments = parser.parse(args);
+		if (arguments.hasOption("help"))
+		{
+			parser.printHelp("Hypergraph generator", System.out);
+			System.exit(0);
+		}
 		if (!arguments.hasOption("t"))
 		{
 			System.err.println("Missing parameter t");
@@ -32,8 +34,7 @@ public class PrintStreamGenerator extends HypergraphGenerator
 		String filename = arguments.getOthers().get(0);
 		try
 		{
-			PrintStreamGenerator psg = createGenerator(new File(filename));
-			System.out.println(psg.getVertexCount());
+			HypergraphGenerator psg = createGenerator(new File(filename), arguments.hasOption("edn"));
 			psg.generateTWayEdges(t);
 		}
 		catch (FileNotFoundException e)
@@ -43,26 +44,7 @@ public class PrintStreamGenerator extends HypergraphGenerator
 		}
 	}
 
-	@Override
-	public void edgeStart()
-	{
-		// Do nothing
-	}
-
-	@Override
-	public void edgeEnd()
-	{
-		System.out.println();
-	}
-
-	@Override
-	public void vertexCallback(List<String> vertex)
-	{
-		System.out.print(getVertexId(vertex));
-		System.out.print(" ");
-	}
-
-	protected static PrintStreamGenerator createGenerator(File f) throws FileNotFoundException
+	protected static HypergraphGenerator createGenerator(File f, boolean edn) throws FileNotFoundException
 	{
 		Scanner scanner = new Scanner(f);
 		List<String> var_names = new ArrayList<String>();
@@ -84,11 +66,20 @@ public class PrintStreamGenerator extends HypergraphGenerator
 			domains.put(var_name, values);
 		}
 		scanner.close();
-		PrintStreamGenerator psg = new PrintStreamGenerator(var_names);
+		HypergraphGenerator psg;
+		if (edn)
+		{
+			psg = new EdnGenerator(var_names);
+		}
+		else
+		{
+			psg = new VertexListGenerator(var_names);
+		}
 		for (Map.Entry<String,List<String>> dom : domains.entrySet())
 		{
 			psg.addDomain(dom.getKey(), dom.getValue());
 		}
 		return psg;
 	}
+
 }

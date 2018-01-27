@@ -39,7 +39,7 @@
   <!-- <author>Marty McFly</author> -->
   
   <!-- The project's main class -->
-  <mainclass>ca.uqac.lif.testing.hypergraph.PrintStreamGenerator</mainclass>
+  <mainclass>ca.uqac.lif.testing.hypergraph.FrontEnd</mainclass>
   
   <!--
     Write JAR dependencies here.
