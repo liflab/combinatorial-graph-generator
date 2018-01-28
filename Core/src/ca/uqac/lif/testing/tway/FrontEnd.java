@@ -12,7 +12,7 @@ import ca.uqac.lif.testing.tway.CliParser.Argument;
 import ca.uqac.lif.testing.tway.CliParser.ArgumentMap;
 
 /**
- * Command-line front-end to the hypergraph generator
+ * Command-line front-end to the graph generator
  */
 public class FrontEnd 
 {
@@ -20,7 +20,7 @@ public class FrontEnd
 	{
 		CliParser parser = new CliParser();
 		parser.addArgument(new Argument().withShortName("t").withArgument("x").withDescription("Generates hyperedges for t=x"));
-		parser.addArgument(new Argument().withLongName("edn").withDescription("Generates graph in EDN format"));
+		parser.addArgument(new Argument().withLongName("method").withArgument("m").withDescription("Generates graph for method m (coloring, edn, hypergraph)"));
 		parser.addArgument(new Argument().withLongName("help").withDescription("Show command line usage"));
 		ArgumentMap arguments = parser.parse(args);
 		if (arguments.hasOption("help"))
@@ -33,44 +33,48 @@ public class FrontEnd
 			System.err.println("Missing parameter t");
 			System.exit(2);
 		}
+		if (!arguments.hasOption("method"))
+		{
+			System.err.println("Missing parameter method");
+			System.exit(2);
+		}
 		int t = Integer.parseInt(arguments.getOptionValue("t"));
+		String method = arguments.getOptionValue("method");
 		String filename = arguments.getOthers().get(0);
+		TWayGraphProblem twp = null;
+		Map<String,List<String>> domains = null;
 		try
 		{
-			HypergraphGenerator psg = createGenerator(t, new File(filename), arguments.hasOption("edn"));
-			psg.generateTWayEdges();
+			domains = parseDomains(new File(filename));
+
 		}
 		catch (FileNotFoundException e)
 		{
 			System.err.println("File " + filename + " not found");
 			System.exit(1);
 		}
-	}
+		List<String> var_names = new ArrayList<String>(domains.size());
+		var_names.addAll(domains.keySet());
 
-	/**
-	 * Parses a file to instantiate a hypergraph generator
-	 * @param f The file to read from
-	 * @param edn Whether to instantiate an EDN generator
-	 * @return The graph generator
-	 * @throws FileNotFoundException If the file was not found
-	 */
-	protected static HypergraphGenerator createGenerator(int t, File f, boolean edn) throws FileNotFoundException
-	{
-		
-		HypergraphGenerator psg;
-		if (edn)
+		if (method.equalsIgnoreCase("coloring"))
 		{
-			psg = new EdnGenerator(t, var_names);
+			twp = new DotGraphGenerator(t, var_names);
+		}
+		else if (method.equalsIgnoreCase("hypergraph"))
+		{
+			twp = new VertexListGenerator(t, var_names);
+		}
+		else if (method.equalsIgnoreCase("edn"))
+		{
+			twp = new EdnGenerator(t, var_names);
 		}
 		else
 		{
-			psg = new VertexListGenerator(t, var_names);
+			System.err.println("Unknown method " + method);
+			System.exit(2);
 		}
-		for (Map.Entry<String,List<String>> dom : domains.entrySet())
-		{
-			psg.addDomain(dom.getKey(), dom.getValue());
-		}
-		return psg;
+		twp.addDomain(domains);
+		twp.generateTWayEdges();
 	}
 	
 	protected static Map<String,List<String>> parseDomains(File f) throws FileNotFoundException

@@ -105,6 +105,18 @@ public class TWayProblem
 	}
 	
 	/**
+	 * Specifies the domain of one or more variables
+	 * @param domain
+	 */
+	public void addDomain(Map<String,List<String>> domain)
+	{
+		for (Map.Entry<String,List<String>> e : domain.entrySet())
+		{
+			addDomain(e.getKey(), e.getValue());
+		}
+	}
+	
+	/**
 	 * Generates all the combinations of t variables
 	 * @param t The number of variables in each tuple
 	 * @return The list of all combinations, each itself being a

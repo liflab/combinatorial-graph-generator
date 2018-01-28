@@ -23,7 +23,7 @@
        script's default values -->
 
   <!-- The project's name -->
-  <name>Hypergraph Generator</name>
+  <name>Graph Generator</name>
   
   <srcdir>Core/src</srcdir>
   <bindir>Core/bin</bindir>
@@ -36,7 +36,7 @@
   </test>
   
   <jar>
-    <filename>hypergraph-generator.jar</filename>
+    <filename>graph-generator.jar</filename>
   </jar>
   
   <!-- The project's author. Currently this only
@@ -44,7 +44,7 @@
   <!-- <author>Marty McFly</author> -->
   
   <!-- The project's main class -->
-  <mainclass>ca.uqac.lif.testing.hypergraph.FrontEnd</mainclass>
+  <mainclass>ca.uqac.lif.testing.tway.FrontEnd</mainclass>
   
   <!--
     Write JAR dependencies here.
