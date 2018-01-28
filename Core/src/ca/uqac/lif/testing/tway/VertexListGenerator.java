@@ -1,19 +1,19 @@
-package ca.uqac.lif.testing.hypergraph;
+package ca.uqac.lif.testing.tway;
 
 import java.util.List;
 
 public class VertexListGenerator extends HypergraphGenerator 
 {
-	public VertexListGenerator(List<String> var_names)
+	public VertexListGenerator(int t, List<String> var_names)
 	{
-		super(var_names);
+		super(t, var_names);
 	}
 	
 	@Override
-	public void generateTWayEdges(int t)
+	public void generateTWayEdges()
 	{
 		System.out.println(getVertexCount());
-		super.generateTWayEdges(t);
+		super.generateTWayEdges();
 	}
 
 	@Override

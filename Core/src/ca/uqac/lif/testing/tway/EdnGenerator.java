@@ -1,4 +1,4 @@
-package ca.uqac.lif.testing.hypergraph;
+package ca.uqac.lif.testing.tway;
 
 import java.util.List;
 
@@ -14,16 +14,16 @@ public class EdnGenerator extends HypergraphGenerator
 	
 	protected long m_edgeNb = 0;
 	
-	public EdnGenerator(List<String> var_names)
+	public EdnGenerator(int t, List<String> var_names)
 	{
-		super(var_names);
+		super(t, var_names);
 	}
 	
 	@Override
-	public void generateTWayEdges(int t)
+	public void generateTWayEdges()
 	{
 		System.out.println("{");
-		super.generateTWayEdges(t);
+		super.generateTWayEdges();
 		System.out.println();
 		System.out.println("}");
 	}

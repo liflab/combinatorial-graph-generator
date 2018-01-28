@@ -1,6 +1,5 @@
-package ca.uqac.lif.testing.hypergraph;
+package ca.uqac.lif.testing.tway;
 
-import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -9,11 +8,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
 
-/**
- * Generates a hypergraph where vertices represent value assignments
- * for a set of variables
- */
-public class HypergraphGenerator
+public class TWayProblem 
 {
 	/**
 	 * The domains for each variable
@@ -34,15 +29,22 @@ public class HypergraphGenerator
 	 * The maximum size of the domain of a variable
 	 */
 	protected int m_maxDomSize = 0;
-
+	
 	/**
-	 * Create a new hypergraph generator
+	 * The value of t
+	 */
+	protected int m_t;
+	
+	/**
+	 * Create a new t-way problem
+	 * @param t The value of t
 	 * @param var_names The names of the variables that will be represented
 	 * in each vertex
 	 */
-	public HypergraphGenerator(String ... var_names)
+	public TWayProblem(int t, String ... var_names)
 	{
 		super();
+		m_t = t;
 		m_domains = new HashMap<String,List<String>>();
 		m_sizes = new HashMap<String,Integer>();
 		m_varNames = new ArrayList<String>(var_names.length);
@@ -53,13 +55,15 @@ public class HypergraphGenerator
 	}
 
 	/**
-	 * Create a new hypergraph generator
+	 * Creates a new t-way problem
+	 * @param t The value of t
 	 * @param var_names The names of the variables that will be represented
 	 * in each vertex
 	 */
-	public HypergraphGenerator(List<String> var_names)
+	public TWayProblem(int t, /*@NonNull*/ List<String> var_names)
 	{
 		super();
+		m_t = t;
 		m_domains = new HashMap<String,List<String>>();
 		m_sizes = new HashMap<String,Integer>();
 		m_varNames = new ArrayList<String>(var_names.size());
@@ -70,36 +74,11 @@ public class HypergraphGenerator
 	}
 	
 	/**
-	 * Method called when the generator starts a new hyperedge
-	 */
-	public void edgeStart()
-	{
-		// Do nothing
-	}
-	
-	/**
-	 * Method called when the generator ends a hyperedge
-	 */
-	public void edgeEnd()
-	{
-		// Do nothing
-	}
-	
-	/**
-	 * Method called when the generator adds a vertex to a hyperedge
-	 * @param vertex The vertex
-	 */
-	public void vertexCallback(List<String> vertex)
-	{
-		// Do nothing
-	}
-	
-	/**
 	 * Specifies the domain of one of the variables
 	 * @param name The name of the variable
 	 * @param values The possible values for that variable
 	 */
-	public void addDomain(String name, String ... values)
+	public void addDomain(String/*@NonNull*/ name, String/*@NonNull*/ ... values)
 	{
 		List<String> vals = new ArrayList<String>(values.length);
 		for (String v : values)
@@ -116,7 +95,7 @@ public class HypergraphGenerator
 	 * @param name The name of the variable
 	 * @param values The possible values for that variable
 	 */
-	public void addDomain(String name, Collection<String> values)
+	public void addDomain(String/*@NonNull*/ name, Collection<String>/*@NonNull*/ values)
 	{
 		List<String> vals = new ArrayList<String>(values.size());
 		vals.addAll(values);
@@ -126,24 +105,15 @@ public class HypergraphGenerator
 	}
 	
 	/**
-	 * Gets the number of vertices in the hypergraph 
-	 * @return The number of vertices
+	 * Generates all the combinations of t variables
+	 * @param t The number of variables in each tuple
+	 * @return The list of all combinations, each itself being a
+	 * list of variable names of length t
 	 */
-	public long getVertexCount()
+	public /*@NonNull*/ List<List<String>> generateTuples()
 	{
-		return (long) Math.pow(m_maxDomSize, m_varNames.size());
-	}
-	
-	/**
-	 * Generates the set of hyperedges corresponding to the <i>t</i>-way
-	 * test case generation problem. The hyperedges are printed to the
-	 * print stream given to the generator using
-	 * {@link #setPrintStream(PrintStream)}.
-	 * @param t The value of t
-	 */
-	public void generateTWayEdges(int t)
-	{
-		HypergraphGenerator hg = new HypergraphGenerator(m_varNames);
+		List<List<String>> tuples = new ArrayList<List<String>>();
+		TWayProblem hg = new TWayProblem(m_t, m_varNames);
 		for (String v : m_varNames)
 		{
 			hg.addDomain(v, "0", "1");
@@ -153,98 +123,40 @@ public class HypergraphGenerator
 		{
 			List<String> names = it.next();
 			List<String> fixed_var_names = getFixedVarNames(names);
-			if (fixed_var_names.size() != t)
+			if (fixed_var_names.size() != m_t)
 			{
 				// This is not a set of the right size; skip
 				continue;
 			}
-			HypergraphGenerator hg2 = new HypergraphGenerator(fixed_var_names);
-			for (String var_name : fixed_var_names)
-			{
-				hg2.addDomain(var_name, m_domains.get(var_name));
-			}
-			VectorIterator it2 = hg2.new VectorIterator();
-			while (it2.hasNext())
-			{
-				List<String> fixed_values = it2.next();
-				Map<String,String> fixed_domains = new HashMap<String,String>();
-				for (int j = 0; j < fixed_values.size(); j++)
-				{
-					fixed_domains.put(fixed_var_names.get(j), fixed_values.get(j));
-				}
-				VectorIterator it3 = new VectorIterator(fixed_domains);
-				edgeStart();
-				while (it3.hasNext())
-				{
-					List<String> vertex = it3.next();
-					vertexCallback(vertex);
-				}
-				edgeEnd();
-			}
+			tuples.add(fixed_var_names);
 		}
+		return tuples;
 	}
 	
-	protected List<String> getFixedVarNames(List<String> vector)
-	{
-		List<String> fixed_var_names = new ArrayList<String>();
-		for (int i = 0; i < vector.size(); i++)
-		{
-			if (vector.get(i).compareTo("1") == 0)
-			{
-				fixed_var_names.add(m_varNames.get(i));
-			}
-		}
-		return fixed_var_names;
-	}
-
-	/**
-	 * Computes the ID of a vertex, based on the valuation of the
-	 * variables it represents
-	 * @param values A list of values; the i-th position of the list
-	 *   contains the value of the i-th variable 
-	 * @return The numerical ID of the corresponding vertex
-	 */
-	public long getVertexId(List<String> values)
-	{
-		long id = 0;
-		int i = 0;
-		for (String var : m_varNames)
-		{
-			int index = m_domains.get(var).indexOf(values.get(i));
-			id += Math.pow(m_maxDomSize, i) * index;
-			i++;
-		}
-		return id;
-	}
-
-	/**
-	 * Computes the ID of a vertex, based on the valuation of the
-	 * variables it represents
-	 * @param values A list of values; the i-th position of the list
-	 *   contains the value of the i-th variable 
-	 * @return The numerical ID of the corresponding vertex
-	 */
-	public long getVertexId(String ... values)
-	{
-		List<String> vals = new ArrayList<String>(values.length);
-		for (String v : values)
-		{
-			vals.add(v);
-		}
-		return getVertexId(vals);
-	}
-
 	/**
 	 * Iterates over all possible values for each variable
 	 */
 	public class VectorIterator implements Iterator<List<String>> 
 	{
-		protected List<String> m_vector;
+		/**
+		 * The list containing the valuation for each variable. The element
+		 * at position i is the value of the i-th variable
+		 */
+		protected /*@NonNull*/ List<String> m_vector;
 
-		protected List<String> m_fixedVariables;
+		/**
+		 * The list of variables whose value is fixed in advance
+		 */
+		protected /*@NonNull*/ List<String> m_fixedVariables;
 
+		/**
+		 * Whether a next solution was computed
+		 */
 		protected boolean m_nextComputed = true;
 
+		/**
+		 * Whether {@link #hasNext()} has been called
+		 */
 		protected boolean m_hasNext = true;
 
 		/**
@@ -264,7 +176,7 @@ public class HypergraphGenerator
 		 * The values must be in the domain of the respective variable, as
 		 * defined in the container hypergraph generator.
 		 */
-		public VectorIterator(/*@NotNull*/ Map<String,String> fixed_values)
+		public VectorIterator(/*@NonNull*/ Map<String,String> fixed_values)
 		{
 			super();
 			m_vector = new ArrayList<String>(m_varNames.size());
@@ -292,13 +204,13 @@ public class HypergraphGenerator
 			m_nextComputed = true;
 			for (int i = 0; i < m_vector.size(); i++)
 			{
-				String var = m_varNames.get(i);
+				/*@NonNull*/ String var = m_varNames.get(i);
 				if (m_fixedVariables.contains(var))
 				{
 					// Don't touch to this element
 					continue;
 				}
-				List<String> dom = m_domains.get(var);
+				/*@NonNull*/ List<String> dom = m_domains.get(var);
 				int idx = dom.indexOf(m_vector.get(i)) + 1;
 				if (idx < m_sizes.get(var))
 				{
@@ -339,5 +251,18 @@ public class HypergraphGenerator
 				throw new NoSuchElementException();
 			}
 		}
+	}
+	
+	protected List<String> getFixedVarNames(List<String> vector)
+	{
+		List<String> fixed_var_names = new ArrayList<String>();
+		for (int i = 0; i < vector.size(); i++)
+		{
+			if (vector.get(i).compareTo("1") == 0)
+			{
+				fixed_var_names.add(m_varNames.get(i));
+			}
+		}
+		return fixed_var_names;
 	}
 }

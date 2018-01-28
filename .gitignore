@@ -60,3 +60,5 @@ jacoco.exec
 
 out.txt
 *.ncond
+variables-to-hypergraph.php
+generate-variables.php

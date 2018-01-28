@@ -1,24 +1,21 @@
-package ca.uqac.lif.testing.hypergraph;
+package ca.uqac.lif.testing.tway;
 import static org.junit.Assert.*;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
-import java.util.NoSuchElementException;
 import java.util.Set;
 
 import org.junit.Test;
 
-import ca.uqac.lif.testing.hypergraph.HypergraphGenerator.VectorIterator;
+import ca.uqac.lif.testing.tway.HypergraphGenerator;
 
-public class HypergraphGeneratorTest 
+public class HypergraphTest 
 {
 	@Test
 	public void testNodeId1()
 	{
-		HypergraphGenerator hg = new HypergraphGenerator("a");
+		HypergraphGenerator hg = new HypergraphGenerator(0, "a");
 		hg.addDomain("a", "0", "1");
 		assertEquals(0, hg.getVertexId("0"));
 		assertEquals(1, hg.getVertexId("1"));
@@ -27,7 +24,7 @@ public class HypergraphGeneratorTest
 	@Test
 	public void testNodeId2()
 	{
-		HypergraphGenerator hg = new HypergraphGenerator("a", "b");
+		HypergraphGenerator hg = new HypergraphGenerator(0, "a", "b");
 		hg.addDomain("a", "0", "1");
 		hg.addDomain("b", "0", "1");
 		assertEquals(0, hg.getVertexId("0", "0"));
@@ -39,7 +36,7 @@ public class HypergraphGeneratorTest
 	@Test
 	public void testNodeId3()
 	{
-		HypergraphGenerator hg = new HypergraphGenerator("a", "b");
+		HypergraphGenerator hg = new HypergraphGenerator(0, "a", "b");
 		hg.addDomain("a", "0", "1", "2");
 		hg.addDomain("b", "0", "1");
 		assertEquals(0, hg.getVertexId("0", "0"));
@@ -50,121 +47,12 @@ public class HypergraphGeneratorTest
 		assertEquals(5, hg.getVertexId("2", "1"));
 	}
 	
-	@Test(expected = NoSuchElementException.class)
-	public void testIterator1()
-	{
-		List<String> vector;
-		HypergraphGenerator hg = new HypergraphGenerator("a");
-		hg.addDomain("a", "0", "1");
-		VectorIterator it = hg.new VectorIterator();
-		assertTrue(it.hasNext());
-		vector = it.next();
-		listEquals(vector, "0");
-		assertTrue(it.hasNext());
-		vector = it.next();
-		listEquals(vector, "1");
-		assertFalse(it.hasNext());
-		vector = it.next();
-	}
-	
-	@Test(expected = NoSuchElementException.class)
-	public void testIterator2()
-	{
-		List<String> vector;
-		HypergraphGenerator hg = new HypergraphGenerator("a", "b");
-		hg.addDomain("a", "0", "1");
-		hg.addDomain("b", "0", "1");
-		VectorIterator it = hg.new VectorIterator();
-		assertTrue(it.hasNext());
-		vector = it.next();
-		listEquals(vector, "0", "0");
-		assertTrue(it.hasNext());
-		vector = it.next();
-		listEquals(vector, "1", "0");
-		assertTrue(it.hasNext());
-		vector = it.next();
-		listEquals(vector, "0", "1");
-		assertTrue(it.hasNext());
-		vector = it.next();
-		listEquals(vector, "1", "1");
-		assertFalse(it.hasNext());
-		vector = it.next();
-	}
-	
-	@Test(expected = NoSuchElementException.class)
-	public void testIterator3()
-	{
-		List<String> vector;
-		HypergraphGenerator hg = new HypergraphGenerator("a", "b");
-		hg.addDomain("a", "0", "1");
-		hg.addDomain("b", "0", "1");
-		Map<String,String> fixed_vars = new HashMap<String,String>();
-		fixed_vars.put("b", "0");
-		VectorIterator it = hg.new VectorIterator(fixed_vars);
-		assertTrue(it.hasNext());
-		vector = it.next();
-		listEquals(vector, "0", "0");
-		assertTrue(it.hasNext());
-		vector = it.next();
-		listEquals(vector, "1", "0");
-		assertFalse(it.hasNext());
-		vector = it.next();
-	}
-	
-	@Test(expected = NoSuchElementException.class)
-	public void testIterator4()
-	{
-		List<String> vector;
-		HypergraphGenerator hg = new HypergraphGenerator("a", "b");
-		hg.addDomain("a", "0", "1");
-		hg.addDomain("b", "0", "1", "2");
-		Map<String,String> fixed_vars = new HashMap<String,String>();
-		fixed_vars.put("a", "1");
-		VectorIterator it = hg.new VectorIterator(fixed_vars);
-		assertTrue(it.hasNext());
-		vector = it.next();
-		listEquals(vector, "1", "0");
-		assertTrue(it.hasNext());
-		vector = it.next();
-		listEquals(vector, "1", "1");
-		assertTrue(it.hasNext());
-		vector = it.next();
-		listEquals(vector, "1", "2");
-		assertFalse(it.hasNext());
-		vector = it.next();
-	}
-	
-	@Test(expected = NoSuchElementException.class)
-	public void testIterator5()
-	{
-		List<String> vector;
-		HypergraphGenerator hg = new HypergraphGenerator("a", "b", "c");
-		hg.addDomain("a", "0", "1");
-		hg.addDomain("b", "0", "1", "2");
-		hg.addDomain("c", "0", "1", "2");
-		Map<String,String> fixed_vars = new HashMap<String,String>();
-		fixed_vars.put("a", "1");
-		fixed_vars.put("c", "2");
-		VectorIterator it = hg.new VectorIterator(fixed_vars);
-		assertTrue(it.hasNext());
-		vector = it.next();
-		listEquals(vector, "1", "0", "2");
-		assertTrue(it.hasNext());
-		vector = it.next();
-		listEquals(vector, "1", "1", "2");
-		assertTrue(it.hasNext());
-		vector = it.next();
-		listEquals(vector, "1", "2", "2");
-		assertFalse(it.hasNext());
-		vector = it.next();
-	}
-	
 	@Test
 	public void testGenerator1a()
 	{
-		CollectorGenerator hg = new CollectorGenerator("a");
+		CollectorGenerator hg = new CollectorGenerator(1, "a");
 		hg.addDomain("a", "0", "1");
-		hg.generateTWayEdges(1);
+		hg.generateTWayEdges();
 		Set<List<List<String>>> edges = hg.getEdges();
 		assertEquals(2, edges.size());
 		assertTrue(containsHyperedge(edges, new String[][]{{"0"}}));
@@ -174,9 +62,9 @@ public class HypergraphGeneratorTest
 	@Test
 	public void testGenerator1b()
 	{
-		CollectorGenerator hg = new CollectorGenerator("a");
+		CollectorGenerator hg = new CollectorGenerator(1, "a");
 		hg.addDomain("a", "0", "1", "2");
-		hg.generateTWayEdges(1);
+		hg.generateTWayEdges();
 		Set<List<List<String>>> edges = hg.getEdges();
 		assertEquals(3, edges.size());
 		assertTrue(containsHyperedge(edges, new String[][]{{"0"}}));
@@ -187,10 +75,10 @@ public class HypergraphGeneratorTest
 	@Test
 	public void testGenerator2()
 	{
-		CollectorGenerator hg = new CollectorGenerator("a", "b");
+		CollectorGenerator hg = new CollectorGenerator(1, "a", "b");
 		hg.addDomain("a", "0", "1");
 		hg.addDomain("b", "0", "1");
-		hg.generateTWayEdges(1);
+		hg.generateTWayEdges();
 		Set<List<List<String>>> edges = hg.getEdges();
 		assertEquals(4, edges.size());
 		assertTrue(containsHyperedge(edges, new String[][]{{"0", "0"}, {"0", "1"}}));
@@ -202,10 +90,10 @@ public class HypergraphGeneratorTest
 	@Test
 	public void testGenerator3()
 	{
-		CollectorGenerator hg = new CollectorGenerator("a", "b");
+		CollectorGenerator hg = new CollectorGenerator(2, "a", "b");
 		hg.addDomain("a", "0", "1");
 		hg.addDomain("b", "0", "1");
-		hg.generateTWayEdges(2);
+		hg.generateTWayEdges();
 		Set<List<List<String>>> edges = hg.getEdges();
 		assertEquals(4, edges.size());
 		assertTrue(containsHyperedge(edges, new String[][]{{"0", "0"}}));
@@ -272,20 +160,6 @@ public class HypergraphGeneratorTest
 	}
 	
 	/**
-	 * Checks if a list is equal to a sequence of values
-	 * @param list The list
-	 * @param values The values
-	 */
-	public static void listEquals(List<String> list, String ... values)
-	{
-		assertEquals(values.length, list.size());
-		for (int i = 0; i < values.length; i++)
-		{
-			assertEquals(values[i], list.get(i));
-		}
-	}
-	
-	/**
 	 * Generator that simply collects all the generated hyperedges. This is
 	 * used for testing only, as it keeps all hyperedges in memory. 
 	 */
@@ -302,9 +176,9 @@ public class HypergraphGeneratorTest
 		 */
 		List<List<String>> m_hyperedge;
 		
-		public CollectorGenerator(String ... vars)
+		public CollectorGenerator(int t, String ... vars)
 		{
-			super(vars);
+			super(t, vars);
 		}
 		
 		/**

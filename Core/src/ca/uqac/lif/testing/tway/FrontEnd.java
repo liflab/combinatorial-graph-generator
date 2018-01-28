@@ -1,4 +1,4 @@
-package ca.uqac.lif.testing.hypergraph;
+package ca.uqac.lif.testing.tway;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -8,8 +8,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 
-import ca.uqac.lif.testing.hypergraph.CliParser.Argument;
-import ca.uqac.lif.testing.hypergraph.CliParser.ArgumentMap;
+import ca.uqac.lif.testing.tway.CliParser.Argument;
+import ca.uqac.lif.testing.tway.CliParser.ArgumentMap;
 
 /**
  * Command-line front-end to the hypergraph generator
@@ -37,8 +37,8 @@ public class FrontEnd
 		String filename = arguments.getOthers().get(0);
 		try
 		{
-			HypergraphGenerator psg = createGenerator(new File(filename), arguments.hasOption("edn"));
-			psg.generateTWayEdges(t);
+			HypergraphGenerator psg = createGenerator(t, new File(filename), arguments.hasOption("edn"));
+			psg.generateTWayEdges();
 		}
 		catch (FileNotFoundException e)
 		{
@@ -54,7 +54,26 @@ public class FrontEnd
 	 * @return The graph generator
 	 * @throws FileNotFoundException If the file was not found
 	 */
-	protected static HypergraphGenerator createGenerator(File f, boolean edn) throws FileNotFoundException
+	protected static HypergraphGenerator createGenerator(int t, File f, boolean edn) throws FileNotFoundException
+	{
+		
+		HypergraphGenerator psg;
+		if (edn)
+		{
+			psg = new EdnGenerator(t, var_names);
+		}
+		else
+		{
+			psg = new VertexListGenerator(t, var_names);
+		}
+		for (Map.Entry<String,List<String>> dom : domains.entrySet())
+		{
+			psg.addDomain(dom.getKey(), dom.getValue());
+		}
+		return psg;
+	}
+	
+	protected static Map<String,List<String>> parseDomains(File f) throws FileNotFoundException
 	{
 		Scanner scanner = new Scanner(f);
 		List<String> var_names = new ArrayList<String>();
@@ -76,20 +95,7 @@ public class FrontEnd
 			domains.put(var_name, values);
 		}
 		scanner.close();
-		HypergraphGenerator psg;
-		if (edn)
-		{
-			psg = new EdnGenerator(var_names);
-		}
-		else
-		{
-			psg = new VertexListGenerator(var_names);
-		}
-		for (Map.Entry<String,List<String>> dom : domains.entrySet())
-		{
-			psg.addDomain(dom.getKey(), dom.getValue());
-		}
-		return psg;
+		return domains;
 	}
 
 }
