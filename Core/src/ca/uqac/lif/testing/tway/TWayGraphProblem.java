@@ -15,6 +15,11 @@ public abstract class TWayGraphProblem extends TWayProblem
 	 */
 	protected long m_edgeCount = 0;
 	
+	/**
+	 * Flag used to manually interrupt the generator
+	 */
+	protected volatile boolean m_running = true;
+	
 	public TWayGraphProblem(int t, String ... var_names)
 	{
 		super(t, var_names);
@@ -72,4 +77,12 @@ public abstract class TWayGraphProblem extends TWayProblem
 	 * @return The number of vertices
 	 */
 	public abstract long getVertexCount(); 
+	
+	/**
+	 * Interrupts the generator
+	 */
+	public void interrupt()
+	{
+		m_running = false;
+	}
 }

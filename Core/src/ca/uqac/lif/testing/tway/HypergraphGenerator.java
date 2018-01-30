@@ -61,7 +61,7 @@ public class HypergraphGenerator extends TWayGraphProblem
 			hg.addDomain(v, "0", "1");
 		}
 		VectorIterator it = hg.new VectorIterator();
-		while (it.hasNext())
+		while (it.hasNext() && m_running)
 		{
 			List<String> names = it.next();
 			List<String> fixed_var_names = getFixedVarNames(names);
@@ -76,7 +76,7 @@ public class HypergraphGenerator extends TWayGraphProblem
 				hg2.addDomain(var_name, m_domains.get(var_name));
 			}
 			VectorIterator it2 = hg2.new VectorIterator();
-			while (it2.hasNext())
+			while (it2.hasNext() && m_running)
 			{
 				List<String> fixed_values = it2.next();
 				Map<String,String> fixed_domains = new HashMap<String,String>();
@@ -86,7 +86,7 @@ public class HypergraphGenerator extends TWayGraphProblem
 				}
 				VectorIterator it3 = new VectorIterator(fixed_domains);
 				edgeStart();
-				while (it3.hasNext())
+				while (it3.hasNext() && m_running)
 				{
 					List<String> vertex = it3.next();
 					vertexCallback(vertex);

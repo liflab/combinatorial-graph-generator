@@ -147,7 +147,7 @@ public class GraphGenerator extends TWayGraphProblem
 				gg.addDomain(var, m_domains.get(var));
 			}
 			VectorIterator it = gg.new VectorIterator();
-			while (it.hasNext())
+			while (it.hasNext() && m_running)
 			{
 				List<String> valuation = it.next();
 				long cur_vertex_id = getVertexId(tuple, tuple_pos, valuation);
@@ -169,7 +169,7 @@ public class GraphGenerator extends TWayGraphProblem
 						gg2.addDomain(cv, m_domains.get(cv));
 					}
 					VectorIterator vi = gg2.new VectorIterator();
-					while (vi.hasNext())
+					while (vi.hasNext() && m_running)
 					{
 						List<String> values = vi.next();
 						if (sameValues(tuple, valuation, common_vars, values))
@@ -191,7 +191,7 @@ public class GraphGenerator extends TWayGraphProblem
 							fixed_vars.put(common_vars.get(j), values.get(j));
 						}
 						VectorIterator vi2 = gg3.new VectorIterator(fixed_vars);
-						while (vi2.hasNext())
+						while (vi2.hasNext() && m_running)
 						{
 							List<String> conflict_valuation = vi2.next();
 							long new_vertex_id = getVertexId(previous_tuple, i, conflict_valuation);
