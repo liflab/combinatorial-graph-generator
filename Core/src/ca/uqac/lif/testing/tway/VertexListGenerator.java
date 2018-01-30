@@ -12,7 +12,7 @@ public class VertexListGenerator extends HypergraphGenerator
 	@Override
 	public void generateTWayEdges()
 	{
-		System.out.println(getVertexCount());
+		m_output.println(getVertexCount());
 		super.generateTWayEdges();
 	}
 
@@ -25,14 +25,15 @@ public class VertexListGenerator extends HypergraphGenerator
 	@Override
 	public void edgeEnd()
 	{
-		System.out.println();
+		m_output.println();
+		m_edgeCount++;
 	}
 
 	@Override
 	public void vertexCallback(List<String> vertex)
 	{
-		System.out.print(getVertexId(vertex));
-		System.out.print(" ");
+		m_output.print(getVertexId(vertex));
+		m_output.print(" ");
 	}
 
 }

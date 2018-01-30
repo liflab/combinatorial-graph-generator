@@ -22,10 +22,10 @@ public class EdnGenerator extends HypergraphGenerator
 	@Override
 	public void generateTWayEdges()
 	{
-		System.out.println("{");
+		m_output.println("{");
 		super.generateTWayEdges();
-		System.out.println();
-		System.out.println("}");
+		m_output.println();
+		m_output.println("}");
 	}
 
 	@Override
@@ -39,7 +39,7 @@ public class EdnGenerator extends HypergraphGenerator
 		{
 			System.out.println(",");
 		}
-		System.out.print("\"" + m_edgeNb + "\" #{");
+		m_output.print("\"" + m_edgeNb + "\" #{");
 		m_edgeNb++;
 		m_firstVertex = true;
 	}
@@ -47,7 +47,8 @@ public class EdnGenerator extends HypergraphGenerator
 	@Override
 	public void edgeEnd()
 	{
-		System.out.print("}");
+		m_output.print("}");
+		m_edgeCount++;
 	}
 
 	@Override
@@ -59,9 +60,9 @@ public class EdnGenerator extends HypergraphGenerator
 		}
 		else
 		{
-			System.out.print(" ");
+			m_output.print(" ");
 		}
-		System.out.print(getVertexId(vertex));
+		m_output.print(getVertexId(vertex));
 	}
 
 }

@@ -261,4 +261,9 @@ public class GraphGenerator extends TWayGraphProblem
 		return intersection;
 	}
 
+	@Override
+	public long getVertexCount()
+	{
+		return m_tGroups.size() * (long) Math.pow(m_maxDomSize, m_t);
+	}
 }

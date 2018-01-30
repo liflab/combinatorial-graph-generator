@@ -2,6 +2,9 @@ package ca.uqac.lif.testing.tway;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -21,6 +24,7 @@ public class FrontEnd
 		CliParser parser = new CliParser();
 		parser.addArgument(new Argument().withShortName("t").withArgument("x").withDescription("Generates hyperedges for t=x"));
 		parser.addArgument(new Argument().withLongName("method").withArgument("m").withDescription("Generates graph for method m (coloring, edn, hypergraph)"));
+		parser.addArgument(new Argument().withShortName("o").withArgument("f").withDescription("Output graph to file f"));
 		parser.addArgument(new Argument().withLongName("help").withDescription("Show command line usage"));
 		ArgumentMap arguments = parser.parse(args);
 		if (arguments.hasOption("help"))
@@ -55,7 +59,6 @@ public class FrontEnd
 		}
 		List<String> var_names = new ArrayList<String>(domains.size());
 		var_names.addAll(domains.keySet());
-
 		if (method.equalsIgnoreCase("coloring"))
 		{
 			twp = new DotGraphGenerator(t, var_names);
@@ -73,8 +76,52 @@ public class FrontEnd
 			System.err.println("Unknown method " + method);
 			System.exit(2);
 		}
+		PrintStream out = null;
+		if (arguments.hasOption("o"))
+		{
+			String out_filename = arguments.getOptionValue("o");
+			try 
+			{
+				out = new PrintStream(new FileOutputStream(new File(out_filename)));
+				twp.setOutput(out);
+			} 
+			catch (FileNotFoundException e)
+			{
+				System.err.println("File not found: " + out_filename);
+				System.exit(2);
+			}
+		}
 		twp.addDomain(domains);
 		twp.generateTWayEdges();
+		if (out != null)
+			out.close();
+	}
+	
+	public static TWayGraphProblem getGenerator(int t, String method, String in_filename, PrintStream out) throws IOException
+	{
+		TWayGraphProblem twp = null;
+		Map<String,List<String>> domains = null;
+		domains = parseDomains(new File(in_filename));
+		List<String> var_names = new ArrayList<String>(domains.size());
+		var_names.addAll(domains.keySet());
+		if (method.equalsIgnoreCase("coloring"))
+		{
+			twp = new DotGraphGenerator(t, var_names);
+		}
+		else if (method.equalsIgnoreCase("hypergraph"))
+		{
+			twp = new VertexListGenerator(t, var_names);
+		}
+		else if (method.equalsIgnoreCase("edn"))
+		{
+			twp = new EdnGenerator(t, var_names);
+		}
+		if (out != null)
+		{
+			twp.setOutput(out);
+		}
+		twp.addDomain(domains);
+		return twp;
 	}
 	
 	protected static Map<String,List<String>> parseDomains(File f) throws FileNotFoundException
