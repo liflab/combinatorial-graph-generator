@@ -1,3 +1,20 @@
+/*
+  Copyright 2015
+  Laboratoire d'informatique formelle
+  Université du Québec à Chicoutimi, Canada
+  
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+  
+      http://www.apache.org/licenses/LICENSE-2.0
+  
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+*/
 package ca.uqac.lif.testing.tway;
 
 import java.util.ArrayList;
@@ -91,10 +108,16 @@ public class HypergraphGenerator extends TWayGraphProblem
         }
         VectorIterator it3 = new VectorIterator(fixed_domains);
         edgeStart();
+        int num_edges = 0;
         while (it3.hasNext() && m_running)
         {
           List<String> vertex = it3.next();
           vertexCallback(vertex);
+          num_edges++;
+          if (num_edges % m_flushEvery == 0)
+          {
+            m_output.flush();
+          }
         }
         edgeEnd();
       }
