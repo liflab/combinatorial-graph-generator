@@ -1,3 +1,20 @@
+/*
+  Copyright 2015
+  Laboratoire d'informatique formelle
+  Université du Québec à Chicoutimi, Canada
+  
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+  
+      http://www.apache.org/licenses/LICENSE-2.0
+  
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+*/
 package ca.uqac.lif.testing.tway;
 
 import java.io.File;
@@ -148,7 +165,7 @@ public class FrontEnd
       out.close();
   }
 
-  protected static Map<String, List<String>> createDomains(int n, int v)
+  public static Map<String, List<String>> createDomains(int n, int v)
   {
     Map<String, List<String>> domains = new HashMap<String, List<String>>();
     for (Integer n_iter = 0; n_iter < n; n_iter++)
@@ -163,7 +180,7 @@ public class FrontEnd
     return domains;
   }
 
-  protected static Map<String, List<String>> parseDomains(File f) throws FileNotFoundException
+  public static Map<String, List<String>> parseDomains(File f) throws FileNotFoundException
   {
     Scanner scanner = new Scanner(f);
     Map<String, List<String>> domains = new HashMap<String, List<String>>();
