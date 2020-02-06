@@ -33,7 +33,7 @@
   <author>Edmond La Chance, Vincent Porta-Scarta, Sylvain Hallé</author>
   
   <!-- The project's main class -->
-  <mainclass>coloring.MyLaboratory</mainclass>
+  <mainclass>ca.uqac.lif.testing.tway.FrontEnd</mainclass>
   
   <!-- Output jar -->
   <jar>
