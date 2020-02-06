@@ -23,7 +23,7 @@
        script's default values -->
 
   <!-- The project's name -->
-  <name>Coloring tests</name>
+  <name>Combinatorial graph generator</name>
   
   <!-- The project's version number -->
   <version>0.3</version>
@@ -43,11 +43,18 @@
   </jar>
   
   <!-- Redefine directories -->
-  <srcdir>Source/src</srcdir>
-  <bindir>Source/bin</bindir>
-  <docdir>Source/doc</docdir>
-  <libdir>Source/lib</libdir>
-  <depdir>Source/dep</depdir>
+  <srcdir>Core/src</srcdir>
+  <bindir>Core/bin</bindir>
+  <docdir>Core/doc</docdir>
+  <libdir>Core/lib</libdir>
+  <depdir>Core/dep</depdir>
+
+  <test>
+    <srcdir>CoreTest/src</srcdir>
+    <bindir>CoreTest/bin</bindir>
+    <libdir>Core/lib</libdir>
+    <depdir>Core/dep</depdir>
+  </test>
   
   <!--
     Write JAR dependencies here.

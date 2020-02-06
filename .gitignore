@@ -14,8 +14,9 @@
 .DS_Store
 
 # Auto-generated folders
-**/Source/dep/
-**/Source/lib
+**/Core/dep/
+**/Core/lib
+**/Core/doc
 
 # Top-level jar, but not jars in subfolders (if any)
 *.jar
