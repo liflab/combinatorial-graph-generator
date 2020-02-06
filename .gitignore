@@ -8,6 +8,7 @@
 *.swp
 *.bak
 *.old
+\#*
 
 # MacOS !#@$ files
 .DS_Store
@@ -60,5 +61,10 @@ jacoco.exec
 
 out.txt
 *.ncond
+<<<<<<< HEAD
 variables-to-hypergraph.php
 generate-variables.php
+=======
+Source/variables-to-graph.php
+Source/variables-to-hypergraph.php
+>>>>>>> Update to dependencies

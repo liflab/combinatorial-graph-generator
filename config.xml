@@ -23,32 +23,59 @@
        script's default values -->
 
   <!-- The project's name -->
-  <name>Graph Generator</name>
+  <name>Coloring tests</name>
   
-  <srcdir>Core/src</srcdir>
-  <bindir>Core/bin</bindir>
-  <depdir>Core/dep</depdir>
-  <docdir>Core/doc</docdir>
-  
-  <test>
-  <srcdir>CoreTest/src</srcdir>
-  <bindir>CoreTest/bin</bindir>
-  </test>
-  
-  <jar>
-    <filename>graph-generator.jar</filename>
-  </jar>
+  <!-- The project's version number -->
+  <version>1.0</version>
   
   <!-- The project's author. Currently this only
   shows up in the footer of the Javadoc documentation. -->
-  <!-- <author>Marty McFly</author> -->
+  <author>Edmond La Chance, Vincent Porta-Scarta, Sylvain Hallé</author>
   
   <!-- The project's main class -->
-  <mainclass>ca.uqac.lif.testing.tway.FrontEnd</mainclass>
+  <mainclass>coloring.MyLaboratory</mainclass>
+  
+  <!-- Output jar -->
+  <jar>
+    <filename>coloring-tests.jar</filename>
+    <withdeps>true</withdeps>
+    <withdoc>false</withdoc>
+  </jar>
+  
+  <!-- Redefine directories -->
+  <srcdir>Source/src</srcdir>
+  <bindir>Source/bin</bindir>
+  <docdir>Source/doc</docdir>
+  <libdir>Source/lib</libdir>
+  <depdir>Source/dep</depdir>
   
   <!--
     Write JAR dependencies here.
   -->
   <dependencies>
+    <dependency>
+      <!--
+      LabPal. Used to handle the lab
+      -->
+      <name>LabPal</name>
+      <bundle>true</bundle>
+      <classname>ca.uqac.lif.labpal.Laboratory</classname>
+      <files>
+        <zip>https://github.com/liflab/labpal/releases/download/v2.11.6/labpal-2.11.6.zip</zip>
+      </files>
+      <bundle>true</bundle>
+    </dependency>
+    <dependency>
+      <!--
+      LabPal. Used to handle the lab
+      -->
+      <name>LabPal</name>
+      <bundle>true</bundle>
+      <classname>ca.uqac.lif.testing.tway.FrontEnd;</classname>
+      <files>
+        <jar>https://github.com/liflab/combinatorial-graph-generator/releases/download/v0.3/combinatorial-graph-generator.jar</jar>
+      </files>
+      <bundle>true</bundle>
+    </dependency>
   </dependencies>
 </build>
