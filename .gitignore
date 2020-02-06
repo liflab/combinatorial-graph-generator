@@ -14,10 +14,8 @@
 .DS_Store
 
 # Auto-generated folders
-Core/doc/
-/lib/
-Core/dep/
-Core/tests/
+**/Source/dep/
+**/Source/lib
 
 # Top-level jar, but not jars in subfolders (if any)
 *.jar
@@ -61,10 +59,6 @@ jacoco.exec
 
 out.txt
 *.ncond
-<<<<<<< HEAD
-variables-to-hypergraph.php
-generate-variables.php
-=======
 Source/variables-to-graph.php
 Source/variables-to-hypergraph.php
->>>>>>> Update to dependencies
+
