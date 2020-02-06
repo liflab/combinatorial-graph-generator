@@ -26,7 +26,7 @@
   <name>Coloring tests</name>
   
   <!-- The project's version number -->
-  <version>1.0</version>
+  <version>0.3</version>
   
   <!-- The project's author. Currently this only
   shows up in the footer of the Javadoc documentation. -->
@@ -37,7 +37,7 @@
   
   <!-- Output jar -->
   <jar>
-    <filename>coloring-tests.jar</filename>
+    <filename>graph-generator.jar</filename>
     <withdeps>true</withdeps>
     <withdoc>false</withdoc>
   </jar>
@@ -53,29 +53,5 @@
     Write JAR dependencies here.
   -->
   <dependencies>
-    <dependency>
-      <!--
-      LabPal. Used to handle the lab
-      -->
-      <name>LabPal</name>
-      <bundle>true</bundle>
-      <classname>ca.uqac.lif.labpal.Laboratory</classname>
-      <files>
-        <zip>https://github.com/liflab/labpal/releases/download/v2.11.6/labpal-2.11.6.zip</zip>
-      </files>
-      <bundle>true</bundle>
-    </dependency>
-    <dependency>
-      <!--
-      LabPal. Used to handle the lab
-      -->
-      <name>LabPal</name>
-      <bundle>true</bundle>
-      <classname>ca.uqac.lif.testing.tway.FrontEnd;</classname>
-      <files>
-        <jar>https://github.com/liflab/combinatorial-graph-generator/releases/download/v0.3/combinatorial-graph-generator.jar</jar>
-      </files>
-      <bundle>true</bundle>
-    </dependency>
   </dependencies>
 </build>
